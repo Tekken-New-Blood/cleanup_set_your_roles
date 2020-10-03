@@ -21,22 +21,23 @@ async def on_message(message):
 
     if message.content.startswith('$cleanup'):
         print(message.channel.id)
-        await _cleanup_channel(message.channel, False)
+        if message.channel.id == set_your_roles_channel_id:
+            await _cleanup_channel(message.channel, False)
+        else:
+            await message.channel.send(wrong_channel_msg)
+            print(wrong_channel_msg)
 
 async def _cleanup_channel(channel, dryrun):
-    if channel.id == set_your_roles_channel_id:
-            async for elem in channel.history():
-                if elem.author.id != yyaen_id:
-                    try:
-                        if dryrun:
-                            print("{} :: {}".format(elem.author, elem.content))
-                        else:
-                            await elem.delete()
-                    except Exception as e:
-                        print("Failed to delete msg :: {}".format(e))
-    else:
-        await channel.send(wrong_channel_msg)
-        print(wrong_channel_msg)
+    async for elem in channel.history():
+        if elem.author.id != yyaen_id:
+            try:
+                if dryrun:
+                    print("{} :: {}".format(elem.author, elem.content))
+                else:
+                    await elem.delete()
+            except Exception as e:
+                print("Failed to delete msg :: {}".format(e))
+
 
 
 def get_credentials():
