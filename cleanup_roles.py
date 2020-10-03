@@ -17,30 +17,27 @@ async def on_message(message):
     if message.content.startswith('$testcleanup'):
         print("Test command called")
         print(message.channel.id)
-        if message.channel.id == set_your_roles_channel_id:
-            async for elem in message.channel.history():
-                if elem.author.id != yyaen_id:
-                    try:
-                        print("{} :: {}".format(elem.author, elem.content))
-                    except:
-                        continue
-        else:
-            await message.channel.send(wrong_channel_msg)
-            print(wrong_channel_msg)
+        _cleanup_channel(message.channel, True)
 
     if message.content.startswith('$cleanup'):
         print(message.channel.id)
-        if message.channel.id == set_your_roles_channel_id:
-            async for elem in message.channel.history():
+        _cleanup_channel(message.channel, False)
+
+async def _cleanup_channel(channel, dryrun):
+    if channel.id == set_your_roles_channel_id:
+            async for elem in channel.history():
                 if elem.author.id != yyaen_id:
                     try:
-                        await elem.delete()
+                        if dryrun:
+                            print("{} :: {}".format(elem.author, elem.content))
+                        else:
+                            await elem.delete()
                     except Exception as e:
-                        print("Failed to delete message :: {}".format(e))
-                        continue
-        else:
-            await message.channel.send(wrong_channel_msg)
-            print(wrong_channel_msg)
+                        print("Failed to delete msg :: {}".format(e))
+    else:
+        await channel.send(wrong_channel_msg)
+        print(wrong_channel_msg)
+
 
 def get_credentials():
     with open("config.txt") as f:
