@@ -17,11 +17,11 @@ async def on_message(message):
     if message.content.startswith('$testcleanup'):
         print("Test command called")
         print(message.channel.id)
-        _cleanup_channel(message.channel, True)
+        await _cleanup_channel(message.channel, True)
 
     if message.content.startswith('$cleanup'):
         print(message.channel.id)
-        _cleanup_channel(message.channel, False)
+        await _cleanup_channel(message.channel, False)
 
 async def _cleanup_channel(channel, dryrun):
     if channel.id == set_your_roles_channel_id:
