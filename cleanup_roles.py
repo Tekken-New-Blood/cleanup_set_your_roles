@@ -2,6 +2,7 @@ import discord
 
 client = discord.Client()
 yyaen_id = 95485950833983488
+shreeder_id = 161215065926795265
 set_your_roles_channel_id = 492305188829265941
 wrong_channel_msg = "This isn't #set_your_roles"
 
@@ -13,6 +14,11 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
+
+    if message.author.id == shreeder_id:
+        # Night Shreeder
+        if "night" in message.content.lower():
+            await message.channel.send("gn Shreeder")
     
     if message.content.startswith('$testcleanup'):
         print("Test command called")
